@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Settings, LogOut, Zap } from 'lucide-react';
+import { LayoutDashboard, Settings, LogOut, Zap, Facebook, Chrome } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import ClientSelector from '@/components/dashboard/ClientSelector';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -12,8 +13,18 @@ const Sidebar = () => {
       icon: LayoutDashboard,
     },
     {
+      name: 'Meta Ads',
+      path: '/platform/meta',
+      icon: Facebook,
+    },
+    {
+      name: 'Google Ads',
+      path: '/platform/google',
+      icon: Chrome,
+    },
+    {
       name: 'Configurações',
-      path: '/configuracoes',
+      path: '/settings',
       icon: Settings,
     },
   ];
@@ -23,10 +34,11 @@ const Sidebar = () => {
   };
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-72 bg-sidebar-background border-r border-sidebar-border flex flex-col overflow-hidden">
+    <aside className="hidden xl:flex fixed left-0 top-0 h-screen w-72 bg-sidebar-background border-r border-sidebar-border flex-col overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 pointer-events-none" />
       
-      <div className="relative p-8 border-b border-sidebar-border/50">
+      {/* Logo */}
+      <div className="relative p-6 border-b border-sidebar-border/50">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center animate-glow">
             <Zap className="w-6 h-6 text-white" />
@@ -38,7 +50,14 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <nav className="relative flex-1 p-6 space-y-2">
+      {/* Client Selector */}
+      <div className="relative p-6 border-b border-sidebar-border/50">
+        <p className="text-xs font-medium text-muted-foreground mb-2">Cliente Selecionado</p>
+        <ClientSelector />
+      </div>
+
+      {/* Navigation */}
+      <nav className="relative flex-1 p-6 space-y-2 overflow-y-auto">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
@@ -74,6 +93,7 @@ const Sidebar = () => {
         })}
       </nav>
 
+      {/* Logout */}
       <div className="relative p-6 border-t border-sidebar-border/50">
         <button
           onClick={handleLogout}

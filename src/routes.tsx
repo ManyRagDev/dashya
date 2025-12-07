@@ -1,7 +1,8 @@
-import Dashboard from './pages/Dashboard';
-import Configuracoes from './pages/Configuracoes';
+import LandingPage from './pages/LandingPage';
 import Login from './pages/Login';
-import MetaCallback from './pages/MetaCallback';
+import GlobalDashboard from './pages/GlobalDashboard';
+import PlatformDetails from './pages/PlatformDetails';
+import Settings from './pages/Settings';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -13,21 +14,9 @@ interface RouteConfig {
 
 const routes: RouteConfig[] = [
   {
-    name: 'Dashboard',
+    name: 'Home',
     path: '/',
-    element: <Dashboard />,
-    visible: false
-  },
-  {
-    name: 'Dashboard',
-    path: '/dashboard',
-    element: <Dashboard />,
-    visible: false
-  },
-  {
-    name: 'Configurações',
-    path: '/configuracoes',
-    element: <Configuracoes />,
+    element: <LandingPage />,
     visible: false
   },
   {
@@ -37,9 +26,21 @@ const routes: RouteConfig[] = [
     visible: false
   },
   {
-    name: 'Meta Callback',
-    path: '/integracao/meta/callback',
-    element: <MetaCallback />,
+    name: 'Dashboard',
+    path: '/dashboard',
+    element: <GlobalDashboard />,
+    visible: false
+  },
+  {
+    name: 'Platform Details',
+    path: '/platform/:name',
+    element: <PlatformDetails />,
+    visible: false
+  },
+  {
+    name: 'Settings',
+    path: '/settings',
+    element: <Settings />,
     visible: false
   }
 ];
