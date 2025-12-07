@@ -1,4 +1,7 @@
-import SamplePage from './pages/SamplePage';
+import Dashboard from './pages/Dashboard';
+import Configuracoes from './pages/Configuracoes';
+import Login from './pages/Login';
+import MetaCallback from './pages/MetaCallback';
 import type { ReactNode } from 'react';
 
 interface RouteConfig {
@@ -10,9 +13,34 @@ interface RouteConfig {
 
 const routes: RouteConfig[] = [
   {
-    name: 'Sample Page',
+    name: 'Dashboard',
     path: '/',
-    element: <SamplePage />
+    element: <Dashboard />,
+    visible: false
+  },
+  {
+    name: 'Dashboard',
+    path: '/dashboard',
+    element: <Dashboard />,
+    visible: false
+  },
+  {
+    name: 'Configurações',
+    path: '/configuracoes',
+    element: <Configuracoes />,
+    visible: false
+  },
+  {
+    name: 'Login',
+    path: '/login',
+    element: <Login />,
+    visible: false
+  },
+  {
+    name: 'Meta Callback',
+    path: '/integracao/meta/callback',
+    element: <MetaCallback />,
+    visible: false
   }
 ];
 
