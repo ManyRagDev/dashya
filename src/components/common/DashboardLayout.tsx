@@ -18,7 +18,7 @@ const DashboardLayout = ({
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
-      <div className="flex-1 ml-64">
+      <div className="flex-1 ml-72">
         <Header userName={userName} userEmail={userEmail} userAvatar={userAvatar} />
         <main className="p-8">
           {children}

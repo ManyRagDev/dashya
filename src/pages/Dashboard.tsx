@@ -7,27 +7,31 @@ const Dashboard = () => {
   const metrics = [
     {
       title: 'Investimento Total',
-      value: 'Aguardando conexão',
+      value: 'R$ 0,00',
       icon: DollarSign,
-      description: 'Conecte sua conta para visualizar',
+      description: 'Aguardando dados da campanha',
+      isLoading: true,
     },
     {
       title: 'CTR Médio',
-      value: 'Aguardando conexão',
+      value: '0,00%',
       icon: MousePointerClick,
-      description: 'Conecte sua conta para visualizar',
+      description: 'Taxa de cliques',
+      isLoading: true,
     },
     {
       title: 'CPC Médio',
-      value: 'Aguardando conexão',
+      value: 'R$ 0,00',
       icon: Target,
-      description: 'Conecte sua conta para visualizar',
+      description: 'Custo por clique',
+      isLoading: true,
     },
     {
       title: 'ROAS',
-      value: 'Aguardando conexão',
+      value: '0,00x',
       icon: TrendingUp,
-      description: 'Conecte sua conta para visualizar',
+      description: 'Retorno sobre investimento',
+      isLoading: true,
     },
   ];
 
@@ -37,11 +41,16 @@ const Dashboard = () => {
       userEmail="gestor@dashya.com"
     >
       <div className="space-y-8">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Visualize e gerencie suas campanhas de tráfego pago
-          </p>
+        <div className="space-y-2">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-1 bg-gradient-to-b from-primary to-secondary rounded-full" />
+            <div>
+              <h1 className="text-4xl font-bold text-foreground">Dashboard</h1>
+              <p className="text-muted-foreground mt-1">
+                Acompanhe o desempenho das suas campanhas em tempo real
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
@@ -52,6 +61,7 @@ const Dashboard = () => {
               value={metric.value}
               icon={metric.icon}
               description={metric.description}
+              isLoading={metric.isLoading}
             />
           ))}
         </div>
