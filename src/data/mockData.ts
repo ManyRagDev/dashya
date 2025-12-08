@@ -52,10 +52,11 @@ export interface FunnelStage {
 export interface Integration {
   id: string;
   name: string;
-  platform: 'meta' | 'google';
+  platform: 'meta' | 'google' | 'tiktok' | 'linkedin' | 'pinterest';
   isActive: boolean;
   accountId?: string;
   icon: string;
+  comingSoon?: boolean;
 }
 
 // Mock Data - Clientes
@@ -282,6 +283,7 @@ export const mockIntegrations: Integration[] = [
     isActive: true,
     accountId: 'act_123456789',
     icon: 'Facebook',
+    comingSoon: false,
   },
   {
     id: 'google',
@@ -290,6 +292,34 @@ export const mockIntegrations: Integration[] = [
     isActive: true,
     accountId: '123-456-7890',
     icon: 'Chrome',
+    comingSoon: false,
+  },
+  {
+    id: 'tiktok',
+    name: 'TikTok Ads',
+    platform: 'tiktok',
+    isActive: false,
+    accountId: '',
+    icon: 'Music',
+    comingSoon: true,
+  },
+  {
+    id: 'linkedin',
+    name: 'LinkedIn Ads',
+    platform: 'linkedin',
+    isActive: false,
+    accountId: '',
+    icon: 'Linkedin',
+    comingSoon: true,
+  },
+  {
+    id: 'pinterest',
+    name: 'Pinterest Ads',
+    platform: 'pinterest',
+    isActive: false,
+    accountId: '',
+    icon: 'Pin',
+    comingSoon: true,
   },
 ];
 
