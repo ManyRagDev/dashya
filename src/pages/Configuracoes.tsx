@@ -15,7 +15,7 @@ const Configuracoes = () => {
   });
 
   const handleSaveProfile = () => {
-    console.log('Perfil salvo:', profile);
+    // TODO: Implementar salvamento real do perfil
   };
 
   return (

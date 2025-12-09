@@ -1,10 +1,13 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Settings, LogOut, Zap, Facebook, Chrome } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ClientSelector from '@/components/dashboard/ClientSelector';
+import { useAuth } from '@/context/AuthContext';
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { signOut } = useAuth();
 
   const menuItems = [
     {
@@ -29,8 +32,13 @@ const Sidebar = () => {
     },
   ];
 
-  const handleLogout = () => {
-    console.log('Logout clicked');
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      navigate('/login');
+    } catch (error) {
+      console.error('Erro ao fazer logout:', error);
+    }
   };
 
   return (
