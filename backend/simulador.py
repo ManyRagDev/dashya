@@ -1,13 +1,19 @@
+import os
 import random
 from datetime import date, timedelta
 from supabase import create_client, Client
 
-# --- COLOQUE SUAS CHAVES DO SUPABASE NOVO AQUI ---
-url: str = "https://shqeatifypcrjvujtnzp.supabase.co"
-key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNocWVhdGlmeXBjcmp2dWp0bnpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNjIxNDgsImV4cCI6MjA4MDczODE0OH0.9ESqRIggWi3LqH_isaQnasRCmhSDVEmzzL2iiTF7tUM" 
-# -------------------------------------------------
+# --- MUDANÇA AQUI: Ler do ambiente em vez de fixo ---
+url = os.environ.get("SUPABASE_URL")
+key = os.environ.get("SUPABASE_KEY")
+# ----------------------------------------------------
+
+if not url or not key:
+    raise ValueError("❌ Erro: Variáveis de ambiente SUPABASE_URL ou SUPABASE_KEY não encontradas.")
 
 supabase: Client = create_client(url, key)
+
+# ... (o resto da função gerar_dados continua igual) ...
 
 def gerar_dados():
     print("🚀 Iniciando geração de dados simulados...")

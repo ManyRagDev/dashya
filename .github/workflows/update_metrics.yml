@@ -1,0 +1,30 @@
+name: Atualizar Métricas Diárias (Simulador)
+
+on:
+  schedule:
+    # Roda todo dia às 09:00 UTC (06:00 Brasil)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Permite rodar manualmente clicando num botão (pra testar)
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Baixar código do repositório
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Instalar dependências
+      run: |
+        pip install -r requirements.txt
+
+    - name: Rodar Simulador
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+      run: python backend/simulador.py
