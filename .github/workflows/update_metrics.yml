@@ -1,17 +1,17 @@
-name: Atualizar Métricas Diárias (Simulador)
+name: Ingestão Real Meta Ads
 
 on:
   schedule:
     # Roda todo dia às 09:00 UTC (06:00 Brasil)
     - cron: '0 9 * * *'
-  workflow_dispatch: # Permite rodar manualmente clicando num botão (pra testar)
+  workflow_dispatch: # Botão para rodar manual
 
 jobs:
-  run-script:
+  run-ingestion:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Baixar código do repositório
+    - name: Baixar código
       uses: actions/checkout@v3
 
     - name: Configurar Python
@@ -23,8 +23,14 @@ jobs:
       run: |
         pip install -r requirements.txt
 
-    - name: Rodar Simulador
+    - name: Rodar Ingestão Meta Ads
       env:
+        # Supabase
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-      run: python backend/simulador.py
+        # Meta Ads Credentials
+        META_APP_ID: ${{ secrets.META_APP_ID }}
+        META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
+        META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+        META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
+      run: python backend/meta_ingestor.py
