@@ -146,12 +146,30 @@ def run_ingestion():
     print("=" * 50)
 
     try:
-        # Formata o ID da conta (o Facebook exige 'act_' na frente se não tiver)
+        # Formata o ID da conta
         id_formatado = f"act_{ad_account_id.replace('act_', '')}"
         account = AdAccount(id_formatado)
 
-        print(f"📊 Conta: {id_formatado}")
+        # --- NOVO: SALVAR IDENTIDADE DA CONTA ---
+        print(f"🔎 Buscando informações da conta: {id_formatado}")
+        # Busca nome e moeda na API do Meta
+        account_info = account.api_get(fields=['name', 'currency'])
+        
+        account_name = account_info.get('name', 'Conta Meta Ads')
+        account_currency = account_info.get('currency', 'BRL')
+        
+        # Salva no Supabase para o Frontend saber o nome real
+        supabase.table('ad_accounts').upsert({
+            "account_id": id_formatado,
+            "name": account_name,
+            "currency": account_currency,
+            "platform": "META",
+            "updated_at": "now()"
+        }).execute()
+        
+        print(f"✅ Conta Identificada e Salva: {account_name} ({account_currency})")
         print("=" * 50)
+        # ----------------------------------------
 
         # Processar últimos N dias
         success_count = 0

@@ -1,4 +1,4 @@
-name: Ingestão Real Meta Ads
+name: Dashya Intelligence Pipeline
 
 on:
   schedule:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch: # Botão para rodar manual
 
 jobs:
-  run-ingestion:
+  run-pipeline:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,16 +21,21 @@ jobs:
 
     - name: Instalar dependências
       run: |
-        pip install -r requirements.txt
+        pip install supabase facebook-business groq python-dotenv
 
-    - name: Rodar Ingestão Meta Ads
+    - name: 1. Ingestão de Dados (Meta Ads)
       env:
-        # Supabase
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-        # Meta Ads Credentials
         META_APP_ID: ${{ secrets.META_APP_ID }}
         META_APP_SECRET: ${{ secrets.META_APP_SECRET }}
         META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
         META_AD_ACCOUNT_ID: ${{ secrets.META_AD_ACCOUNT_ID }}
       run: python backend/meta_ingestor.py
+
+    - name: 2. Análise de Inteligência (Groq AI)
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      run: python backend/ai_analyst.py

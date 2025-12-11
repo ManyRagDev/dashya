@@ -239,3 +239,27 @@ export const getMetricsWithComparison = async (days: number = 7) => {
     deltas: calculateDelta(currentMetrics, previousMetrics),
   };
 };
+
+export interface Insight {
+  date: string;
+  insight_text: string;
+  detailed_reason: string;
+  sentiment: 'positive' | 'warning' | 'critical';
+  confidence_score: number;
+}
+
+export const getLatestInsight = async (): Promise<Insight | null> => {
+  // Busca o insight mais recente (hoje ou ontem)
+  const { data, error } = await supabase
+    .from('daily_insights')
+    .select('*')
+    .order('date', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (error) {
+    console.error('Erro ao buscar insight:', error);
+    return null;
+  }
+  return data;
+};
