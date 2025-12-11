@@ -2,18 +2,21 @@ import { useEffect, useState } from 'react';
 import DashboardLayout from '@/components/common/DashboardLayout';
 import MetricCard from '@/components/dashboard/MetricCard';
 import MetaCampaignsList from '@/components/dashboard/MetaCampaignsList';
-import { DollarSign, MousePointerClick, TrendingUp, Target, BarChart3 } from 'lucide-react';
+import { DollarSign, MousePointerClick, TrendingUp, Target, BarChart3, Users, Wallet } from 'lucide-react';
 import { AIInsightCard } from '@/components/dashboard/AIInsightCard';
 import { supabase } from '@/lib/supabase';
 
-// Mantive o nome DashboardGlobal para não quebrar suas rotas
 const DashboardGlobal = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({
     spend: 0,
     ctr: 0,
     cpc: 0,
-    roas: 0
+    roas: 0,
+    revenue: 0,
+    leads: 0,
+    cpl: 0,
+    date: ''
   });
 
   useEffect(() => {
@@ -22,6 +25,7 @@ const DashboardGlobal = () => {
 
   const fetchMetrics = async () => {
     try {
+      // Busca o registro mais recente que tenha dados
       const { data: metricsData, error } = await supabase
         .from('daily_account_metrics')
         .select('*')
@@ -36,7 +40,11 @@ const DashboardGlobal = () => {
           spend: metricsData.spend || 0,
           ctr: metricsData.ctr || 0,
           cpc: metricsData.cpc || 0,
-          roas: metricsData.roas || 0
+          roas: metricsData.roas || 0,
+          revenue: metricsData.revenue || 0,
+          leads: metricsData.leads || 0,
+          cpl: metricsData.cpl || 0,
+          date: metricsData.date
         });
       }
     } catch (error) {
@@ -46,9 +54,13 @@ const DashboardGlobal = () => {
     }
   };
 
+  // --- LÓGICA HÍBRIDA (E-COMMERCE vs LEADS) ---
+  // Se tivermos leads, mostramos cards de Leads. Se não, cards de Venda.
+  const isLeadCampaign = data.leads > 0;
+
   const metrics = [
     {
-      title: 'Investimento (Ontem)',
+      title: `Investimento (${data.date ? new Date(data.date).toLocaleDateString('pt-BR') : 'Hoje'})`,
       value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.spend),
       icon: DollarSign,
       description: 'Total investido no dia',
@@ -61,18 +73,24 @@ const DashboardGlobal = () => {
       description: 'Taxa de cliques',
       isLoading: loading,
     },
+    // CARD 3: Dinâmico (Custo por Lead ou ROAS)
     {
-      title: 'CPC Médio',
-      value: new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.cpc),
-      icon: Target,
-      description: 'Custo por clique',
+      title: isLeadCampaign ? 'Custo por Lead (CPL)' : 'ROAS',
+      value: isLeadCampaign 
+        ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.cpl)
+        : `${data.roas}x`,
+      icon: isLeadCampaign ? Users : TrendingUp,
+      description: isLeadCampaign ? 'Custo para adquirir um contato' : 'Retorno sobre investimento',
       isLoading: loading,
     },
+    // CARD 4: Dinâmico (Total Leads ou Receita Total)
     {
-      title: 'ROAS',
-      value: `${data.roas}x`,
-      icon: TrendingUp,
-      description: 'Retorno sobre investimento',
+      title: isLeadCampaign ? 'Total de Leads' : 'Receita Total',
+      value: isLeadCampaign 
+        ? data.leads.toString()
+        : new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(data.revenue),
+      icon: isLeadCampaign ? Target : Wallet,
+      description: isLeadCampaign ? 'Cadastros realizados' : 'Valor total vendido',
       isLoading: loading,
     },
   ];
@@ -85,7 +103,6 @@ const DashboardGlobal = () => {
       <div className="space-y-8 animate-in fade-in duration-500">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            {/* Efeito visual novo */}
             <div className="h-8 w-1 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
             <div>
               <h1 className="text-4xl font-bold text-white tracking-tight">Sala de Comando</h1>
@@ -97,7 +114,6 @@ const DashboardGlobal = () => {
           </div>
         </div>
 
-        {/* O CARD DA INTELIGÊNCIA ARTIFICIAL */}
         <AIInsightCard />
 
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-4 gap-6">
